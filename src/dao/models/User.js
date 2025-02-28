@@ -24,6 +24,10 @@ const schema = new mongoose.Schema({
         type:String,
         default:'user'
     },
+    isOnline:{
+        type:Boolean,
+        default:false
+    },
 })
 
 const userModel = mongoose.model(collection,schema);

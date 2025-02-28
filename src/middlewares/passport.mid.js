@@ -4,12 +4,7 @@ import envUtil from "../utils/env.util.js";
 import { Strategy as LocalStrategy } from "passport-local"
 import { Strategy as GoogleStrategy } from "passport-google-oauth2"
 import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
-import {
-    createUserService,
-    readUserByEmailService,
-    updateUserService,
-    readUserByIdService
-} from "../services/users.service.js"
+import { usersService } from "../services/index.service.js"
 
 import { createHashUtil, verifyHashUtil } from "../utils/hash.util.js"
 import { createTokenUtil, verifyTokenUtil } from "../utils/token.util.js"
@@ -22,17 +17,18 @@ passport.use("register",
     new LocalStrategy({ passReqToCallback: true, usernameField: "email" },
         async (req, email, password, done) => {
             try {
-                const one = await readUserByEmailService(email);
+                const one = await usersService.getUserByEmail(email);
                 if (one) {
                     const info = { message: "USER ALREADY EXISTS", statusCode: 401 };
                     return done(null, false, info);
                 }
                 const hashedPassword = createHashUtil(password);
                 const verifyCode = crypto.randomBytes(12).toString("hex")
-                const user = await createUserService({
+                const user = await usersService.create({
                     email,
                     password: hashedPassword,
-                    name: req.body.name || "Name",
+                    first_name: req.body.first_name || "First Name",
+                    last_name: req.body.last_name || "Last Name",
                     verifyCode
                 });
                 await sendVerifyEmail({ to: email, verifyCode })
@@ -47,20 +43,20 @@ passport.use("login",
     new LocalStrategy({ usernameField: "email" },
         async (email, password, done) => {
             try {
-                const user = await readUserByEmailService(email);
+                const user = await usersService.getUserByEmail(email);
                 if (!user) {
                     const info = { message: "USER NOT FOUND", statusCode: 401 };
                     return done(null, false, info);
                 }
                 // Verifico si el Usuario ya esta registrado
-                if (!user.verifiedUser) {
-                    // vuelvo a enviar el mail con el código de verificación
-                    const verifyCode = user.verifyCode
-                    console.log("Verify Code: ", verifyCode)
-                    await sendVerifyEmail({ to: email, verifyCode })
-                    const info = { message: "Please, verify your account. A new email has been sent" }
-                    return done(null, false, info)
-                }
+                // if (!user.verifiedUser) {
+                //     // vuelvo a enviar el mail con el código de verificación
+                //     const verifyCode = user.verifyCode
+                //     console.log("Verify Code: ", verifyCode)
+                //     //await sendVerifyEmail({ to: email, verifyCode })
+                //     const info = { message: "Please, verify your account. A new email has been sent" }
+                //     return done(null, false, info)
+                // }
 
                 // Verifico la contraseña
                 const passwordForm = password;
@@ -76,7 +72,7 @@ passport.use("login",
                 };
                 const token = createTokenUtil(data);
                 user.token = token;
-                await updateUserService(user._id, { isOnline: true });
+                await usersService.update(user._id, { isOnline: true });
                 return done(null, user);
             } catch (error) {
                 return done(error);
@@ -96,7 +92,7 @@ passport.use("admin",
                     const info = { message: "NOT AUTHORIZE", statusCode: 403 };
                     return done(null, false, info);
                 }
-                const user = await readUserByIdService(user_id);
+                const user = await usersService.getUserById(user_id);
                 return done(null, user);
             } catch (error) { }
         }
@@ -110,7 +106,7 @@ passport.use("online",
         async (data, done) => {
             try {
                 const { user_id } = data;
-                const user = await readUserByIdService(user_id);
+                const user = await usersService.getUserById(user_id);
                 const { isOnline } = user;
                 if (!isOnline) {
                     const info = { message: "USER IS NOT ONLINE", statusCode: 401 };
@@ -132,7 +128,7 @@ passport.use("signout",
         async (data, done) => {
             try {
                 const { user_id } = data;
-                await updateUserService(user_id, { isOnline: false });
+                await usersService.update(user_id, { isOnline: false });
                 return done(null, { user_id: null });
             } catch (error) {
                 return done(error);
@@ -145,7 +141,7 @@ passport.use("resetPassword",
         async (req, email, password, done) => {
             try {
                 // Busco el usuario
-                const user = await readUserByEmailService(email);
+                const user = await usersService.getUserByEmail(email);
                 if (!user) {
                     const info = { message: "USER DOESN'T EXIST", statusCode: 401 };
                     return done(null, false, info);
@@ -177,11 +173,11 @@ passport.use("google", new GoogleStrategy(
             const { id, picture } = profile
             // como estrategia de terceros NO SE SUELE registrar al usuario por su email sino por su identificador en la base del tercero
             // esto es debido a que si utilizo el email, SI O SI necesito la contraseña y la contraseña NO LA ENVIA NINGUN TERCERO (google)
-            let user = await readUserByEmailService(id)
+            let user = await usersService.getUserByEmail(id)
             // si el usuario no es parte de la base de datos
             if (!user) {
                 // lo crea/registra
-                user = await createUserService({ email: id, photo: picture, password: createHashUtil(id) })
+                user = await usersService.create({ email: id, photo: picture, password: createHashUtil(id) })
             }
             // los datos de la session se deben guardar en un token
             const data = {
@@ -189,7 +185,7 @@ passport.use("google", new GoogleStrategy(
                 role: user.role,
             }
             const token = createTokenUtil(data);
-            await updateUserService(user._id, { isOnline: true });
+            await usersService.update(user._id, { isOnline: true });
             user.token = token;
             //req.headers.token = token
             return done(null, user)
