@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
-import customerModel from './Customer.js';
 
-const collection = 'Quotation';
+const collection = 'Quotations';
 
 const schema = new mongoose.Schema({
     date: {

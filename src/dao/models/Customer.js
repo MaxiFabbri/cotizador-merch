@@ -22,7 +22,7 @@ const schema = new mongoose.Schema({
         type:String,
         required:false,
     },
-    CustomerPaymentMethod:{
+    customerPaymentMethod:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'CustomerPaymentMethod'
     }

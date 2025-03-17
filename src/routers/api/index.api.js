@@ -8,6 +8,8 @@ import suppliersApiRouter from "./suppliers.api.js";
 import supplierPaymentMethodsApiRouter from "./supplierPaymentMethods.api.js";
 import customersApiRouter from "./customers.api.js";
 import quotationsApiRouter from "./quotations.api.js";
+import productsApiRouter from "./products.api.js";
+import processesApiRouter from "./processes.api.js";
 
 
 class ApiRouter extends CustomRouter {
@@ -23,6 +25,8 @@ class ApiRouter extends CustomRouter {
     this.use("/suppliers", ["PUBLIC"], suppliersApiRouter);
     this.use("/supplier-payment-methods", ["PUBLIC"], supplierPaymentMethodsApiRouter);
     this.use("/quotations", ["PUBLIC"], quotationsApiRouter);
+    this.use("/products", ["PUBLIC"], productsApiRouter);
+    this.use("/processes", ["PUBLIC"], processesApiRouter);
     this.use("/sessions", ["PUBLIC"], sessionsApiRouter);
   };
 }

@@ -1,4 +1,4 @@
-import quotationModel from './models/quotation.js';
+import quotationModel from './models/Quotation.js';
 
 
 export default class quotations {
