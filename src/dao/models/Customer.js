@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
-import customerPaymentMethodsModel from './CustomerPaymentMethod.js';
+import customerPaymentMethodsModel from './CustomerPaymentMethod.js';   
+
 
 
 const collection = 'Customers';
@@ -22,7 +23,7 @@ const schema = new mongoose.Schema({
         type:String,
         required:false,
     },
-    customerPaymentMethod:{
+    customerPaymentMethodId:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'CustomerPaymentMethod'
     }

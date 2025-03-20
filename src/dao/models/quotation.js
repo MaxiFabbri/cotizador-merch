@@ -19,6 +19,13 @@ const schema = new mongoose.Schema({
         type: String,
         required: true,
         enum: ['Dolar', 'Euro', 'Peso'], // Opciones permitidas
+        default: 'Peso',
+    },
+    quoteStatus: {
+        type: String,
+        required: true,
+        enum: ['Cotizado', 'Enviada', 'Aceptada', 'Rechazada'], // Opciones permitidas
+        default: 'Cotizado',
     },
     isKit: {
         type: Boolean,

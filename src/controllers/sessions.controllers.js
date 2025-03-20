@@ -13,7 +13,10 @@ function login(req, res, next) {
 function signout(req, res, next) {
   const message = "User signed out!";
   const response = "OK";
-  return res.clearCookie("token").json200(response, message);
+  console.log("SIGNOUT ",res.cookie);
+  return res.clearCookie("token", {
+    httpOnly: true
+  }).json200(response, message);
 }
 function google(req, res, next) {
   //const { token } = req.user;

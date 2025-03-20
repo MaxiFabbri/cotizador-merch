@@ -2,24 +2,34 @@ import quotationModel from './models/Quotation.js';
 
 
 export default class quotations {
-    
-    get = (params) =>{
+
+    get = (params) => {
         return quotationModel.find(params);
     }
 
-    getBy = (params) =>{
+    getQuotationsWithCustomerDetails = () => {
+        return quotationModel.find()
+            .populate({
+                path: 'customerId',
+                populate: {
+                    path: 'customerPaymentMethodId'
+                }
+            })
+    }
+
+    getBy = (params) => {
         return quotationModel.findOne(params);
     }
 
-    save = (doc) =>{
+    save = (doc) => {
         return quotationModel.create(doc);
     }
 
-    update = (id,doc) =>{
-        return quotationModel.findByIdAndUpdate(id,{$set:doc})
+    update = (id, doc) => {
+        return quotationModel.findByIdAndUpdate(id, { $set: doc })
     }
 
-    delete = (id) =>{
+    delete = (id) => {
         return quotationModel.findByIdAndDelete(id);
     }
 }
