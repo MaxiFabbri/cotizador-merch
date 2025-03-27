@@ -3,6 +3,7 @@ import {
     createCustomer, 
     readCustomer,
     readCustomerById,
+    readCustomerByNameOrCode,
     updateCustomer, 
     destroyCustomer 
 } from "../../controllers/customers.controllers.js";
@@ -14,6 +15,7 @@ class CustomersApiRouter extends CustomRouter {
         this.init();
     }
     init = () => {
+        this.create("/name", ["USER", "ADMIN"], readCustomerByNameOrCode);
         this.create("/", ["USER", "ADMIN"], createCustomer);
         this.read("/", ["USER", "ADMIN"], readCustomer);
         this.read("/:id", ["USER", "ADMIN"], readCustomerById);

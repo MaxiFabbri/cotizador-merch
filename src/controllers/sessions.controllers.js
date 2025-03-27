@@ -5,7 +5,7 @@ function register(req, res, next) {
 }
 function login(req, res, next) {
   const { token } = req.user;
-  const opts = { maxAge: 1000 * 60 * 60 * 6, httpOnly: true };
+  const opts = { maxAge: 1000 * 60 * 60 * 24 * 14 , httpOnly: true };
   const message = "User logged in!";
   const response = "OK";
   return res.cookie("token", token, opts).json200(response, message);

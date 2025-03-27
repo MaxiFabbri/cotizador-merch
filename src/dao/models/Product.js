@@ -30,6 +30,10 @@ const schema = new mongoose.Schema({
     unitSellingPrice: {
         type: Number,
         required: false
+    },
+    productDescription: {
+        type: String,
+        required: false
     }
 })
 

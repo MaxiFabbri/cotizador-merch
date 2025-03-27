@@ -11,6 +11,10 @@ const schema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Customers'
     },
+    paymentMethodId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'PaymentMethods'
+    },
     monthlyRate: {
         type: Number,
         required: true

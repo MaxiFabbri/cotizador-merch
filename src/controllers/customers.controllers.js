@@ -15,10 +15,15 @@ async function readCustomer(req, res) {
 async function readCustomerById(req, res) {
     const { id } = req.params;
     const message = "CUSTOMER FOUND";
-    const response = await customerService.getCustomerPaymentMethodById(id);
+    const response = await customerService.getCustomerById(id);
     return res.status(200).json({ response, message });
 }
-
+async function readCustomerByNameOrCode(req, res) {
+    const { name } = req.body;
+    const message = "CUSTOMERS FOUND";
+    const response = await customerService.getCustomerByNameOrCode(name);
+    return res.status(200).json({ response, message });
+}
 async function updateCustomer(req, res) {
     const { id } = req.params;
     const data = req.body;
@@ -38,6 +43,7 @@ export {
     createCustomer, 
     readCustomer,
     readCustomerById,
+    readCustomerByNameOrCode,
     updateCustomer, 
     destroyCustomer 
 }

@@ -14,6 +14,10 @@ const schema = new mongoose.Schema({
     monthlyRate:{
         type:Number,
         required:true
+    },
+    dolar:{
+        type:Number,
+        required:true
     }
 })
 
