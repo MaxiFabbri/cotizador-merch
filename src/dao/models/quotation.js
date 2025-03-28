@@ -5,7 +5,7 @@ const collection = 'Quotations';
 const schema = new mongoose.Schema({
     date: {
         type: Date,
-        required: true
+        required: false
     },
     customerId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -17,7 +17,7 @@ const schema = new mongoose.Schema({
     },
     monthlyRate: {
         type: Number,
-        required: true
+        required: false
     },
     currency: {
         type: String,
