@@ -31,6 +31,16 @@ const schema = new mongoose.Schema({
         enum: ['Cotizado', 'Enviada', 'Aceptada', 'Rechazada'], // Opciones permitidas
         default: 'Cotizado',
     },
+    quoteProductsDescription: {
+        type: String,
+        required: true,
+        default: ''
+    },    
+    quoteUnitSellingPrice: {
+        type: Number,
+        required: true,
+        default: 0
+    },
     isKit: {
         type: Boolean,
         required: true,

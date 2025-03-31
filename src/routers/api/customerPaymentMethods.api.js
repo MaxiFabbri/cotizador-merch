@@ -3,6 +3,7 @@ import {
     createCustomerPaymentMethod, 
     readCustomerPaymentMethod,
     readCustomerPaymentMethodById,
+    readCustomerPaymentMethodByName,
     updateCustomerPaymentMethod, 
     destroyCustomerPaymentMethod 
 } from "../../controllers/customerPaymentMethods.controllers.js";
@@ -14,6 +15,7 @@ class CustomerPaymentMethodsApiRouter extends CustomRouter {
         this.init();
     }
     init = () => {
+        this.create("/name", ["USER", "ADMIN"], readCustomerPaymentMethodByName);
         this.create("/", ["USER", "ADMIN"], createCustomerPaymentMethod);
         this.read("/", ["USER", "ADMIN"], readCustomerPaymentMethod);
         this.read("/:id", ["USER", "ADMIN"], readCustomerPaymentMethodById);

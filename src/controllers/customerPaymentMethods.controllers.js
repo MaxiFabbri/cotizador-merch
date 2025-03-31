@@ -18,7 +18,12 @@ async function readCustomerPaymentMethodById(req, res) {
     const response = await customerPaymentMethodService.getCustomerPaymentMethodById(id);
     return res.status(200).json({ response, message });
 }
-
+async function readCustomerPaymentMethodByName(req, res) {
+    const { name } = req.body;
+    const message = "CUSTOMER PAYMENT METHODS FOUND";
+    const response = await customerPaymentMethodService.getCustomerPaymentMethodByName(name);
+    return res.status(200).json({ response, message });
+}
 async function updateCustomerPaymentMethod(req, res) {
     const { id } = req.params;
     const data = req.body;
@@ -38,6 +43,7 @@ export {
     createCustomerPaymentMethod, 
     readCustomerPaymentMethod,
     readCustomerPaymentMethodById,
+    readCustomerPaymentMethodByName,
     updateCustomerPaymentMethod, 
     destroyCustomerPaymentMethod 
 }

@@ -12,8 +12,7 @@ export default class CustomerRepository extends GenericRepository{
     getCustomerById = (id) =>{
         return this.getBy({_id:id})
     }
-    getCustomerByNameOrCode = (name) =>{
-        console.log("Repository Name: ",name)  
+    getCustomerByNameOrCode = (name) =>{  
         return this.getAll({
             $or: [
                 { name: { $regex: name, $options: "i" } }, // Coincidencias parciales en "name"
